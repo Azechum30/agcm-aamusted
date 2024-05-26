@@ -144,7 +144,8 @@ const app = new Hono()
                     serialNumber: serialNumber,
                     entryYear: formattedEntryYear,
                     dateOfBirth: date,
-                    gender: validSchema.gender as string
+                    gender: validSchema.gender as string,
+                    phoneNumber: validSchema.phoneNumber as string
                 }
             })
             
