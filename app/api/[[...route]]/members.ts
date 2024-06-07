@@ -180,7 +180,7 @@ const app = new Hono()
             return c.json({data}, 200)
         } )
     .post(
-        '/',
+        '/bulk-create',
         clerkMiddleware(),
         zValidator( 'json', z.object( {
             data: z.array(bulkUploadSchema)
