@@ -37,6 +37,15 @@ const extendedMemberSchema = MemberSchema.omit( {
     imageFile: z.union([z.instanceof(File), z.undefined(), z.string()])
 } )
 
+
+const bulkUploadSchema = extendedMemberSchema.omit( {
+    imageFile: true,
+    imageUrl: true,
+    dateOfBirth: true
+} ).extend( {
+    dateOfBirth: z.string()
+})
+
 const app = new Hono()
     .get(
         '/',
@@ -169,7 +178,35 @@ const app = new Hono()
             }
             const data = await prisma.members.deleteMany( { where: { id: { in: values.ids  } } } )
             return c.json({data}, 200)
-        })
+        } )
+    .post(
+        '/',
+        clerkMiddleware(),
+        zValidator( 'json', z.object( {
+            data: z.array(bulkUploadSchema)
+        } ) ), 
+        async ( c ) =>
+        {
+            const auth = getAuth( c )
+            const validSchema = c.req.valid( 'json' );
+
+            if ( !auth?.userId ) {
+                throw new HTTPException( 401, {
+                    res: c.json({error: 'Unauthenticated'}, 401)
+                })
+            }
+
+            const dataWithSerialNumbers = validSchema.data.map( person => (
+                { ...person, serialNumber: generateSerialNumber( 'AG', `${ person.entryYear }`, 3 ), gender:person.gender as string, entryYear: Number(person.entryYear) } ) );
+
+            console.log( dataWithSerialNumbers );
+
+            const data = await prisma.members.createMany({data: dataWithSerialNumbers})
+
+            return c.json( { data }, 201)
+        
+        }
+    )
     .patch(
     '/:id',
     clerkMiddleware(),
