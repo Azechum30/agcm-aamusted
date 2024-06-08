@@ -39,7 +39,7 @@ function MembersPage() {
         <Suspense fallback={<span className='flex items-center gap-1'>Loading <MoreHorizontal className='animate-ping' /></span>}>
           <MembersDataTable
             columns={columns}
-            data={ data as QueryResponseType[] || [] }
+            data={ data as QueryResponseType[] }
             disabled={ isPending }
             onDelete={ ( row ) =>
             {

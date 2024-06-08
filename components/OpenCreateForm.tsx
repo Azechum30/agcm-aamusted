@@ -11,7 +11,7 @@ function OpenCreateForm (  )
   
   return (
     <>
-      <Button variant='default' onClick={()=>setIsOpen(true)}>
+      <Button variant='default' onClick={()=>setIsOpen()}>
         Add a new Member
       </Button>
     </>

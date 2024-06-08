@@ -183,12 +183,12 @@ const app = new Hono()
         '/bulk-create',
         clerkMiddleware(),
         zValidator( 'json', z.object( {
-            data: z.array(bulkUploadSchema)
+           json: z.array(bulkUploadSchema)
         } ) ), 
         async ( c ) =>
         {
             const auth = getAuth( c )
-            const validSchema = c.req.valid( 'json' );
+            const { json } = c.req.valid( 'json' );
 
             if ( !auth?.userId ) {
                 throw new HTTPException( 401, {
@@ -196,7 +196,7 @@ const app = new Hono()
                 })
             }
 
-            const dataWithSerialNumbers = validSchema.data.map( person => (
+            const dataWithSerialNumbers = json.map( person => (
                 { ...person, serialNumber: generateSerialNumber( 'AG', `${ person.entryYear }`, 3 ), gender:person.gender as string, entryYear: Number(person.entryYear) } ) );
 
             console.log( dataWithSerialNumbers );

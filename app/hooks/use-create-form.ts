@@ -2,7 +2,7 @@
 import { create } from 'zustand'
 type OpenState = {
     isOpen: boolean,
-    setIsOpen: (open:boolean) => void,
+    setIsOpen: () => void,
     onClose: ()=> void
     
 }

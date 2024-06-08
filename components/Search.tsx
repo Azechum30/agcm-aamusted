@@ -12,6 +12,7 @@ import { Button } from './ui/button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 
+
 const FormSchema = z.object( {
     search: z.string( { required_error: "search a term is required!" } ).regex( new RegExp( '^[a-zA-Z0-9\\s]+$' ), 'special characters are not allowed!' )
 } );
@@ -30,7 +31,7 @@ function Search ()
     
     const params = new URLSearchParams( searchParams );
 
-    function onSubmit ( data: InputType )
+    function onSubmit (  data: InputType )
     {
         if ( data.search ) {
             params.set( 'q', data.search as string );
@@ -47,7 +48,7 @@ function Search ()
     <Form {...form}>
           <form
               onSubmit={ form.handleSubmit( onSubmit ) }
-              className={ cn( 'flex items-center px-3 py-1 rounded-full border bg-inherit mr-auto md:w-[200%] w-full', { 'border-red-400': form.formState.errors.search } ) }
+              className={ cn( 'flex items-center px-3 py-1 rounded-full border bg-inherit mr-auto md:w-[100%] w-full', { 'border-red-400': form.formState.errors.search } ) }
           >
               <SearchIcon strokeWidth={1.5} className='text-muted-foreground w-4 h-4' />
               <FormField control={ form.control } name='search' render={ ( { field } ) => (
@@ -59,7 +60,7 @@ function Search ()
                   </FormItem>
               ) } />
               <div className='flex items-center ml-auto'>
-                  { (form.formState.isDirty || form.formState.errors.search) && 
+                  { !!(form.formState.isDirty || form.formState.errors.search) && 
                         <Button
                         className='text-muted-foreground text-sm h-8'
                         type='button'

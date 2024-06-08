@@ -24,9 +24,10 @@ import {
 import {  useState } from "react";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { LayoutGrid,  Trash2 } from "lucide-react";
+import { LayoutGrid,  Trash2, Upload } from "lucide-react";
 import Search from '@/components/Search'
 import { useConfirmBulkDelete } from "@/app/hooks/use-confirm-bulk-delete";
+import { useOpenSheet } from "@/app/hooks/use-open-sheet";
 
 type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[],
@@ -42,6 +43,8 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
         "Are you sure?",
         "You are about to perform a bulk delete. Please be informed that this would permanently remove those members from your system. Click 'Cancel' to abort the process or 'Confirm' to continue "
     )
+
+    const {onOpen} = useOpenSheet()
 
     const [ sorting, setSorting ] = useState<SortingState>( [] )
     const [ rowSelection, setRowSelection ] = useState<RowSelectionState>( {} )
@@ -68,6 +71,9 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
       <div>
           <BulkDeleteDialog />
           <div className="flex flex-col sm:flex-row sm:gap-3 sm:items-center mb-2">
+              <div className='mr-auto w-full'>
+                   <Search />
+             </div>
               <div>
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -89,8 +95,13 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
                       </DropdownMenuContent>
                   </DropdownMenu>
               </div> 
-              <Search />
               <div>
+                  <Button onClick={onOpen} variant={'outline'}>
+                      <Upload className='size-4 mr-1' />
+                      Upload File
+                  </Button>
+              </div>
+              <>
                   { 
                       table.getSelectedRowModel().rows ? (
                           table.getSelectedRowModel().rows.length > 0 &&
@@ -113,7 +124,7 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
                       </Button>
                       ): null
                    }
-              </div>
+              </>
           </div>
           <div className="border rounded-md overflow-x-auto w-full lg:overflow-hidden">
             <Table>
