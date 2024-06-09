@@ -14,6 +14,7 @@ function MembersPage() {
 
   const { data, isLoading } = useGetMembers()
   const { mutate, isPending } = useBulkDeleteMembers()
+
   
   if ( isLoading ) {
     return (
@@ -21,8 +22,9 @@ function MembersPage() {
         <CardHeader className='sm:flex-row sm:justify-between sm:items-center gap-y-4 bg-gray-100/85 mb-4 border-b'>
           <Skeleton />
         </CardHeader>
-        <CardContent className='w-[500px] mx-auto flex justify-center items-center h-screen'>
-          <Loader2 className='size-6 text-muted-foreground animate-spin' />
+        <CardContent className='w-full flex justify-center items-center h-screen'>
+          Loading data
+          <Loader2 className='size-6 text-muted-foreground animate-spin ml-2' />
         </CardContent>
     </Card>
     )
@@ -30,10 +32,9 @@ function MembersPage() {
 
   return (
     <Card className='drop-shadow-md border-none rounded-none max-w-6xl w-full mx-auto -mt-4'>
-      <CardHeader className='sm:flex-row sm:justify-between sm:items-center gap-y-4 bg-gray-100/85 mb-4 border-b sticky top-0 left-0 h-16'>
+      <CardHeader className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-y-3 bg-gray-100/85 mb-4 border-b sm:sticky sm:top-0 lg:left-0 sm:h-16 text-center sm:text-left'>
         <CardTitle className='text-xl capitalize line-clamp-1'>List of Members</CardTitle>
         <OpenCreateForm />
-        
       </CardHeader>
       <CardContent className='w-full'>
         <Suspense fallback={<span className='flex items-center gap-1'>Loading <MoreHorizontal className='animate-ping' /></span>}>

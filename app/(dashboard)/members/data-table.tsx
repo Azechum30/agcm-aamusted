@@ -68,16 +68,16 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
 
 
   return (
-      <div>
+      <div className='pt-5'>
           <BulkDeleteDialog />
-          <div className="flex flex-col sm:flex-row sm:gap-3 sm:items-center mb-2">
+          <div className="flex flex-col-reverse sm:flex-row gap-3 sm:items-center mb-2">
               <div className='mr-auto w-full'>
-                   <Search />
+                <Search />
              </div>
               <div>
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                          <Button variant='outline'>
+                          <Button variant='outline' className='w-full sm:w-auto'>
                               <LayoutGrid className="w-4 h-4 mr-1" />
                               Columns
                           </Button>
@@ -96,7 +96,7 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
                   </DropdownMenu>
               </div> 
               <div>
-                  <Button onClick={onOpen} variant={'outline'}>
+                  <Button onClick={onOpen} variant={'outline'} className='w-full sm:w-auto'>
                       <Upload className='size-4 mr-1' />
                       Upload File
                   </Button>

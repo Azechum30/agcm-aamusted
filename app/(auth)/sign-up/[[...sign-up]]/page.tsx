@@ -5,9 +5,9 @@ import Image from 'next/image'
 
 function SignUpPage() {
   return (
-    <div className='min-h-screen grid grid-cols-1 lg:grid-cols-2'>
-      <div className='flex flex-col items-center justify-center h-screen'>
-        <div className='pt-8 text-center'>
+    <div className='min-h-screen grid grid-cols-1 lg:grid-cols-2 py-10'>
+      <div className='flex flex-col items-center justify-center min-h-screen'>
+        <div className='text-center'>
           <h1 className='text-3xl font-bold text-muted-foreground'>Welcome Back</h1>
           <p className='text-sm text-muted-foreground'>Sign in or create an account to return your dashboard</p>
         </div>

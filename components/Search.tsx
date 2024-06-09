@@ -22,7 +22,8 @@ type InputType = z.infer<typeof FormSchema>
 function Search ()
 {
     const form = useForm<InputType>( {
-        resolver: zodResolver( FormSchema )
+        resolver: zodResolver( FormSchema ),
+        defaultValues: {search: ''}
     } );
 
     const searchParams = useSearchParams();
@@ -48,31 +49,23 @@ function Search ()
     <Form {...form}>
           <form
               onSubmit={ form.handleSubmit( onSubmit ) }
-              className={ cn( 'flex items-center px-3 py-1 rounded-full border bg-inherit mr-auto md:w-[100%] w-full', { 'border-red-400': form.formState.errors.search } ) }
+              className={ cn( 'flex items-center px-3 py-1 rounded-md sm:rounded-full border bg-inherit mr-auto md:w-[100%] w-full', { 'border-red-400': form.formState.errors.search } ) }
           >
-              <SearchIcon strokeWidth={1.5} className='text-muted-foreground w-4 h-4' />
+              <SearchIcon strokeWidth={1.5} className='hidden sm:flex text-muted-foreground w-4 h-4' />
               <FormField control={ form.control } name='search' render={ ( { field } ) => (
-                  <FormItem>
+                  <FormItem className='w-full'>
                       <Input
                           {...field}
-                          className='focus-visible:ring-0 shadow-none border-none bg-transparent rounded-none h-8'
+                          className='focus-visible:ring-0 shadow-none border-none bg-transparent rounded-none h-7'
                       />
                   </FormItem>
               ) } />
               <div className='flex items-center ml-auto'>
-                  { !!(form.formState.isDirty || form.formState.errors.search) && 
-                        <Button
-                        className='text-muted-foreground text-sm h-8'
-                        type='button'
-                        size={ 'icon' }
-                        variant='ghost'
-                        onClick={clearInput}
-                        >
-                          <X className='text-muted-foreground w-4 h-4' />
-                        </Button>
-                }
+                  { (form.formState.isDirty || form.formState.errors.search) && 
+                    <X className='text-muted-foreground w-4 h-4'  onClick={clearInput}/>  
+                  }
                   <Button
-                  className='text-muted-foreground text-sm h-8'
+                  className='text-muted-foreground text-sm h-6'
                   type='submit'
                   size={ 'sm' }
                   variant='ghost'

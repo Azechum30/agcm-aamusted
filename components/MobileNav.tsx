@@ -1,10 +1,17 @@
+
 import Image from 'next/image'
 import { Sheet, SheetTrigger, SheetClose, SheetContent, SheetTitle, SheetHeader } from './ui/sheet'
-import { AlignJustify } from 'lucide-react'
+import { AlignJustify, Loader2 } from 'lucide-react'
 import { linkData } from '@/lib/constants'
 import Link from 'next/link'
+import { ClerkLoaded, ClerkLoading, UserButton } from '@clerk/nextjs'
+import {currentUser} from '@clerk/nextjs/server'
 
-function MobileNav() {
+
+
+async function MobileNav ()
+{
+  const user = await currentUser()
   return (
     <div className='flex justify-between items-center mobilenav border-b px-4 shadow-md mb-4 sticky top-0 z-50 h-16 bg-gray-100 dark:bg-zinc-900'>
         <div className='flex gap-2 items-center'>
@@ -44,7 +51,18 @@ function MobileNav() {
                               </SheetClose>
                           ))}
                       </div>
-                  ))}
+                  ) ) }
+                <div>
+                    <div className="mt-2 flex gap-3 items-center">
+                        <ClerkLoaded>
+                            <UserButton afterSignOutUrl="/sign-in" />
+                        </ClerkLoaded>
+                        <h2 className="text-sm capitalize">{user?.firstName}</h2>
+                    </div>
+                    <ClerkLoading>
+                        <Loader2  className='size-4 animate-spin text-muted-foreground'/>
+                    </ClerkLoading>
+                </div>
             </SheetContent>
         </Sheet>
     </div>
