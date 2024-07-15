@@ -24,6 +24,7 @@ export default function RootLayout({
       <html lang="en">
           <body className={ inter.className }>
               <QueryProvider>
+                
               <DrawerProvider />
               <SheetProvider />
                 <div className='scroll-watcher'></div>

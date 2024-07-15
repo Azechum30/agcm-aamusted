@@ -10,14 +10,7 @@ import * as z from 'zod'
 
 
 
-interface QueryObject {
-  where?: {
-    OR: {
-      firstName: { contains: string; mode: 'insensitive' };
-      lastName: { contains: string; mode: 'insensitive' };
-    }[];
-  };
-}
+
 
 
 const { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } = process.env

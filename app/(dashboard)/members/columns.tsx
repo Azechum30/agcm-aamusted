@@ -4,6 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { InferResponseType } from 'hono'
 import {client} from '@/lib/hono'
@@ -45,12 +46,14 @@ export const columns = [
         cell: ( { row } ) =>
         {
             return (
-                <Image
+                <Link href={ `/members/${row.original.id}` }>
+                    <Image
                     src={ row.getValue( 'imageUrl' ) || '/noAvatar.png' }
                     alt='Profile picture'
                     width={ 40 }
                     height={ 40 }
                     className='w-6 h-6 object-cover rounded-full' />
+                </Link>
             )
         }
     },
@@ -83,21 +86,6 @@ export const columns = [
         header: 'Contact',
         accessorKey: 'phoneNumber',
     },
-    // {
-    //     header: ( { column } ) =>
-    //     {
-    //         return (
-    //             <Button
-    //                 variant='ghost'
-    //                 onClick={()=>column.toggleSorting(column.getIsSorted() === 'asc')}
-    //             >
-    //                 EntryYear <ArrowUpDown className='w-4 h-4 ml-1' /> 
-    //             </Button>
-    //         )
-            
-    //     },
-    //     accessorKey: 'entryYear',
-    // },
     {
         header: 'Department',
         accessorKey: 'department'
@@ -113,13 +101,5 @@ export const columns = [
             return <Actions id={row.original.id} />
         }
     },
-    // {
-    //     header: 'Hostel',
-    //     accessorKey: 'hostel'
-    // },
-    // {
-    //     header: 'Programme',
-    //     accessorKey: 'course'
-    // }
 ] satisfies ColumnDef<QueryResponseType>[]
 

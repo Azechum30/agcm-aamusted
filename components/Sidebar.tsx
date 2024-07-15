@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils"
    const pathname = usePathname()
   
   return (
-    <div className='flex-1 bg-gray-100 dark:bg-inherit dark:border-r flex flex-col gap-2 py-4 px-2 sm:px-6 h-screen sidebar sticky top-0 left-0 z-[50] overflow-y-auto'>
+    <div className='flex-1 bg-gray-100 dark:bg-inherit dark:border-r flex flex-col gap-2 py-4 px-2 sm:px-6 h-screen sidebar sticky top-0 left-0 z-[50]'>
        <Link href='/'>
         <div className="flex items-center gap-2 border-b border-b-gray-400/25 dark:border-b-gray-100/5 pb-4 justify-center sm:justify-start">
             <Image
@@ -49,11 +49,11 @@ import { cn } from "@/lib/utils"
         </div>
       ) ) }
       <div>
-        <div className="mt-2 flex gap-3 items-center">
+        <div className="mt-2 flex flex-col justify-center sm:justify-normal sm:flex-row gap-3 items-center">
             <ClerkLoaded>
                 <UserButton afterSignOutUrl="/sign-in" />
             </ClerkLoaded>
-            <h2 className="text-sm capitalize">{user?.firstName}</h2>
+            <h2 className="hidden sm:block text-sm capitalize">{user?.firstName}</h2>
         </div>
         <ClerkLoading>
             <Loader2  className='size-4 animate-spin text-muted-foreground'/>
