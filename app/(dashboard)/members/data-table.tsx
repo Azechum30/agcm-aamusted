@@ -24,10 +24,12 @@ import {
 import {  useState } from "react";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { LayoutGrid,  Trash2, Upload } from "lucide-react";
+import { Download, File, LayoutGrid,  Trash2, Upload } from "lucide-react";
 import Search from '@/components/Search'
 import { useConfirmBulkDelete } from "@/app/hooks/use-confirm-bulk-delete";
 import { useOpenSheet } from "@/app/hooks/use-open-sheet";
+import { exportToExcel } from "@/lib/utils";
+
 
 type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[],
@@ -66,18 +68,19 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
     
     } );
 
+    
 
   return (
       <div className='pt-5'>
           <BulkDeleteDialog />
-          <div className="flex flex-col-reverse sm:flex-row gap-3 sm:items-center mb-2">
+          <div className="flex flex-col-reverse md:flex-row gap-3 md:items-center mb-2">
               <div className='mr-auto w-full'>
                 <Search />
              </div>
               <div>
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                          <Button variant='outline' className='w-full sm:w-auto'>
+                          <Button variant='outline' className='w-full md:w-auto'>
                               <LayoutGrid className="w-4 h-4 mr-1" />
                               Columns
                           </Button>
@@ -96,9 +99,15 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
                   </DropdownMenu>
               </div> 
               <div>
-                  <Button onClick={onOpen} variant={'outline'} className='w-full sm:w-auto'>
+                  <Button onClick={onOpen} variant={'default'} className='w-full md:w-auto'>
                       <Upload className='size-4 mr-1' />
-                      Upload File
+                      Upload
+                  </Button>
+              </div>
+              <div>
+                  <Button onClick={()=>exportToExcel(data)} variant={'default'} className='w-full md:w-auto'>
+                      <Download className='size-4 mr-1' />
+                      Excel
                   </Button>
               </div>
               <>
@@ -126,7 +135,7 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
                    }
               </>
           </div>
-          <div className="border rounded-md overflow-x-auto w-full lg:overflow-hidden">
+          <div id="my-table" className="border rounded-md overflow-x-auto w-full lg:overflow-hidden">
             <Table>
               <TableHeader>
                   { table.getHeaderGroups().map( headerGroups => (
