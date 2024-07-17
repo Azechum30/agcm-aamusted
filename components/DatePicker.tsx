@@ -26,7 +26,10 @@ function DatePicker({date, setDate}:DatePickerProps) {
               <Calendar
                   mode='single'
                   selected={ date }
-                  onSelect={setDate}
+                  onSelect={ setDate }
+                  fromYear={ 1970 }
+                  toYear={2024}
+                  captionLayout='dropdown-buttons' 
                   initialFocus
               />
           </PopoverContent>
