@@ -19,7 +19,7 @@ function DashboarLayout ({ children, modal, statistics }: Props)
             { modal }
             <div className='px-6 py-10 main-content'>
               {children}
-              {statistics}
+              {/* {statistics} */}
             </div>
         </main>
       </div>

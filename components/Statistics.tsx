@@ -4,17 +4,15 @@ import CardComponent from '@/components/Card'
 import { LoaderPinwheel, UsersRound } from 'lucide-react'
 import { useGetMemberMetrics } from '@/features/dashboard/use-get-member-metrics'
 
-function StatisticsPage ()
-{ 
-  
-  const { data, isLoading} = useGetMemberMetrics()
+function Statistics ()
+{
+    const { data, isLoading} = useGetMemberMetrics()
   
   if ( isLoading ) {
     return <span className='w-full h-screen flex justify-center items-center'>
       <LoaderPinwheel className='size-6 animate-spin' />
     </span>
   }
-  
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
       <CardComponent
@@ -38,4 +36,4 @@ function StatisticsPage ()
   )
 }
 
-export default StatisticsPage
+export default Statistics

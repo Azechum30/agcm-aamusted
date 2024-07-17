@@ -19,6 +19,7 @@ export const useCreateMember= () =>{
         {
             toast.success("member created!")
             queryClient.invalidateQueries({queryKey: ['members']})
+            queryClient.invalidateQueries({queryKey: ['dashboard']})
         },
 
         onError: () =>

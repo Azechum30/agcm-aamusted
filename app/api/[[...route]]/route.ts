@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { handle } from 'hono/vercel'
 
 import members from './members'
+import dashboard from './dashboard'
 
 // export const runtime = 'nodejs'
 const app = new Hono().basePath( '/api' )
@@ -13,6 +14,7 @@ app.onError( ( err, c ) =>
 })
 
 const routes = app
+    .route('/', dashboard)
     .route( '/members', members )
 
 
