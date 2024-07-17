@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { client } from '@/lib/hono'
-import { InferResponseType, InferRequestType } from 'hono'
+
 
 
 export const useGetMemberMetrics = () =>
 {
     const query = useQuery( {
-        queryKey: [ 'dashboard' ],
+        queryKey: [ 'totalMemberCount' ],
         queryFn: async () => await getMetrics()
     } )
     
