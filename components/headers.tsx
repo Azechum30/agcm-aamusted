@@ -16,6 +16,10 @@ type table = {
 
 export const headers = [
     {
+        header: 'Serial Number',
+        accessorKey: 'serialNumber'
+    },
+    {
         header: 'First Name',
         accessorKey: 'firstName'
     },
@@ -51,9 +55,6 @@ export const headers = [
         header: 'Hostel/Hall',
         accessorKey: 'hostel'
     },
-    {
-        header: 'Serial Number',
-        accessorKey: 'serialNumber'
-    },
+    
 
 ] satisfies ColumnDef<table>[]

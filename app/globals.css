@@ -108,7 +108,7 @@
   position: fixed;
   top: 0px;
   left: 0px;
-  height: 1px;
+  height: 2.5px;
   width: 100%;
   z-index: 1000;
   scale: 0 1;
@@ -119,7 +119,7 @@
 
 .scroll-watcher
 {
-  @apply bg-gradient-to-tr from-red-800 to-red-600
+  @apply bg-gradient-to-tr from-red-600 to-red-400
 }
 
 @keyframes scroll

@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react'
 import MembersDataTable from './data-table'
-import { File, Loader2, MoreHorizontal } from 'lucide-react'
+import { ArrowBigDown, File, Loader2, MoreHorizontal } from 'lucide-react'
 import OpenCreateForm from '@/components/OpenCreateForm'
 import {Card, CardHeader, CardContent, CardTitle} from '@/components/ui/card'
 import { useGetMembers } from '@/features/members/api/use-get-members'
@@ -39,21 +39,23 @@ function MembersPage() {
   {
   
     const doc = new jsPDF( { orientation: 'landscape' } )
-    doc.setFontSize( 15 )
+    doc.setFontSize(16)
     
     const title = 'List of AGCM-AAMUSTED Members'
 
     const tableDat = data?.map( row =>
     {
       const formattedDate = new Date( row.dateOfBirth ).toLocaleDateString()
+      const formattedGender = `${row.gender.charAt(0).toUpperCase()} ${row.gender.slice(1)}`
       row.dateOfBirth = formattedDate
+      row.gender = formattedGender
       return row
     })
 
     const header = headers.map( col =>col.header )
     const tableData = tableDat?.map( row => headers.map( col => row[ col.accessorKey! ] ) )
-    doc.text(title, 40, 40)
-    autoTable( doc, { head: [header], body: tableData } )
+    doc.text("LIST OF AGCM, AAMUSTED-KUMASI STUDENTS", 15, 10)
+    autoTable( doc, { head: [header], body: tableData, startY: 20, theme:'grid' } )
     doc.save('table.pdf')
   }
 
@@ -64,8 +66,8 @@ function MembersPage() {
         <div className='flex flex-col sm:flex-row sm:items-center gap-3'>
           <OpenCreateForm />
           <Button variant='destructive' size={ 'sm' } onClick={ exportPDF }>
-            <File className='size-4 mr-1' />
-            Generate PDF
+            <ArrowBigDown className='size-6 mr-1' />
+            View as PDF
           </Button>
         </div>
       </CardHeader>

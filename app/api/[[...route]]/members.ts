@@ -192,8 +192,6 @@ const app = new Hono()
             const dataWithSerialNumbers = json.map( person => (
                 { ...person, serialNumber: generateSerialNumber( 'AG', `${ person.entryYear }`, 3 ), gender:person.gender as string, entryYear: Number(person.entryYear) } ) );
 
-            console.log( dataWithSerialNumbers );
-
             const data = await prisma.members.createMany({data: dataWithSerialNumbers})
 
             return c.json( { data }, 201)
