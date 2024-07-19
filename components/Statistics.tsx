@@ -1,36 +1,40 @@
 'use client'
 
 import CardComponent from '@/components/Card'
-import { LoaderPinwheel, UsersRound } from 'lucide-react'
+import { Loader2, LoaderPinwheel, LucideUserPlus2, Sigma, UsersRound } from 'lucide-react'
 import { useGetMemberMetrics } from '@/features/dashboard/use-get-member-metrics'
+import GenderDoughnutChart from './GenderDoughnutChart'
 
 function Statistics ()
 {
     const { data, isLoading} = useGetMemberMetrics()
   
   if ( isLoading ) {
-    return <span className='w-full h-screen flex justify-center items-center'>
-      <LoaderPinwheel className='size-6 animate-spin' />
+    return <span className='w-full h-full flex justify-center items-center'>
+      <Loader2 className='size-6 animate-spin' />
     </span>
   }
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
       <CardComponent
         title='Total Membership'
-        description='The total number church members'
-        icon={ <UsersRound /> }
+        description='Total percentage:'
+        icon={ <Sigma className='size-8' /> }
         numberCount={data![0]}
+        percentage={ ( ( data![ 0 ] / data![ 0 ]! ) * 100 ) }
       /><CardComponent
         title='Males'
-        description='The total number of males'
-        icon={ <UsersRound /> }
+        description='Percentage of males:'
+        icon={ <LucideUserPlus2 className='size-8' /> }
         numberCount={data![1]}
+        percentage={Math.round((data![1] / data![0]!) * 100)}
       />
       <CardComponent
         title='Females'
-        description='The total number of females'
-        icon={ <UsersRound /> }
+        description='Percentage of females:'
+        icon={ <UsersRound className='size-8' /> }
         numberCount={data![2]}
+        percentage={Math.round((data![2] / data![0]!) * 100)}
       />
     </div>
   )

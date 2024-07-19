@@ -46,7 +46,7 @@ function MembersPage() {
     const tableDat = data?.map( row =>
     {
       const formattedDate = new Date( row.dateOfBirth ).toLocaleDateString()
-      const formattedGender = `${row.gender.charAt(0).toUpperCase()} ${row.gender.slice(1)}`
+      const formattedGender = `${row.gender.charAt(0).toUpperCase()}${row.gender.slice(1)}`
       row.dateOfBirth = formattedDate
       row.gender = formattedGender
       return row

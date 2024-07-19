@@ -21,6 +21,7 @@ export const useBulkDeleteMembers = () =>
         {
             toast.success("members deleted successfully")
             queryClient.invalidateQueries( { queryKey: [ 'members' ] } )
+            queryClient.invalidateQueries( { queryKey: [ 'totalMemberCount' ] } )
             
         },
 

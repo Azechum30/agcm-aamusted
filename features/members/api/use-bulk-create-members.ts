@@ -20,6 +20,7 @@ export const useBulkCreateMembers = () =>
         {
             toast.success( "members uploaded successfully" )
             queryClient.invalidateQueries({queryKey: ['members']})
+            queryClient.invalidateQueries({queryKey: ['totalMemberCount']})
         },
 
         onError: () =>
