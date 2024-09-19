@@ -1,8 +1,6 @@
 name: Deploy
 on:
   push:
-    paths:
-      - "prisma/migrations/**"
     branches:
       - master
 jobs:
@@ -14,7 +12,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "18"
       - name: Install dependencies
         run: npm ci
       - name: Apply all pending migrations to the database
