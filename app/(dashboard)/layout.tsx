@@ -6,10 +6,9 @@ import React, { ReactNode } from 'react'
 type Props = {
   readonly children: ReactNode,
   modal: ReactNode,
-  statistics: ReactNode
 }
 
-function DashboarLayout ({ children, modal, statistics }: Props)
+function DashboarLayout ({ children, modal }: Props)
 {
   return (
       <div className='flex'>
@@ -18,8 +17,7 @@ function DashboarLayout ({ children, modal, statistics }: Props)
             <MobileNav />
             { modal }
             <div className='px-6 py-10 main-content'>
-              {children}
-              {/* {statistics} */}
+              { children }
             </div>
         </main>
       </div>
