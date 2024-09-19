@@ -2,7 +2,7 @@ name: Deploy
 on:
   push:
     paths:
-      - prisma/migrations/
+      - prisma/migrations/**
     branches:
       - master
 jobs:
