@@ -12,10 +12,6 @@ import { useEditMember } from '@/features/members/api/use-edit-member';
 import { useConfirmBulkDelete } from '@/app/hooks/use-confirm-bulk-delete';
 import { useDeleteMember } from '@/features/members/api/use-delete-member';
 
-type Props = {
-  isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
-}
 
 
 type gender = 'male' | 'female'

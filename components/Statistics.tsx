@@ -16,26 +16,32 @@ function Statistics ()
   }
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
-      <CardComponent
-        title='Total Membership'
-        description='Total percentage:'
-        icon={ <Sigma className='size-8' /> }
-        numberCount={data![0]}
-        percentage={ ( ( data![ 0 ] / data![ 0 ]! ) * 100 ) }
-      /><CardComponent
-        title='Males'
-        description='Percentage of males:'
-        icon={ <LucideUserPlus2 className='size-8' /> }
-        numberCount={data![1]}
-        percentage={Math.round((data![1] / data![0]!) * 100)}
-      />
-      <CardComponent
-        title='Females'
-        description='Percentage of females:'
-        icon={ <UsersRound className='size-8' /> }
-        numberCount={data![2]}
-        percentage={Math.round((data![2] / data![0]!) * 100)}
-      />
+      { data?.length !== 0 &&  (
+        <>
+            <CardComponent
+            title='Total Membership'
+            description='Total percentage:'
+            icon={ <Sigma className='size-8' /> }
+            numberCount={data![0]}
+            percentage={ ( ( data![ 0 ] / data![ 0 ]! ) * 100 )  || 0}
+          /><CardComponent
+            title='Males'
+            description='Percentage of males:'
+            icon={ <LucideUserPlus2 className='size-8' /> }
+            numberCount={data![1!]}
+            percentage={Math.round((data![1] / data![0]!) * 100) || 0}
+          />
+          <CardComponent
+            title='Females'
+            description='Percentage of females:'
+            icon={ <UsersRound className='size-8' /> }
+            numberCount={data![2!]}
+            percentage={Math.round((data![2] / data![0]!) * 100) || 0}
+            />
+      </>
+      )
+        
+      }
     </div>
   )
 }

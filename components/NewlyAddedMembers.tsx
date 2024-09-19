@@ -114,7 +114,7 @@ function NewlyAddedMembers ()
         return <span className='flex justify-center items-center'><Loader2 className='size-6 animate-spin' /></span>
     }
   return (
-    <DataTable columns={columns} data={data as any} />
+    <DataTable columns={columns} data={data as any } />
   )
 }
 

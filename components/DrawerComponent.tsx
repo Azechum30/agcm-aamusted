@@ -1,18 +1,9 @@
-
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
-import { ScrollArea } from '@/components/ui/scroll-area'
 import CreateMember from '@/app/forms/create-member-form'
-import { Dispatch, SetStateAction } from 'react';
 import { useCreateMember } from '@/features/members/api/use-create-member';
 import { MemberType } from '@/app/types/types';
 import useCreateForm from '@/app/hooks/use-create-form';
-import {useMountedState} from 'react-use'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from './ui/sheet';
 
-type Props = {
-  isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
-}
 
 const defaultValues = {
         firstName: '',

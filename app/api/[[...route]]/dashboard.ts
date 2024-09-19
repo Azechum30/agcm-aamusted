@@ -16,9 +16,9 @@ const app = new Hono()
         }
 
         const memberMetrics = await Promise.allSettled( [
-            prisma.members.count(),
-            prisma.members.count( { where: { gender: 'male' } } ),
-            prisma.members.count({where:{gender: 'female'}})
+            prisma.member.count(),
+            prisma.member.count( { where: { gender: 'male' } } ),
+            prisma.member.count({where:{gender: 'female'}})
         ] )
         
         let data: number[] = []

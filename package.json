@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "prisma generate"
+    "lint": "next lint"
   },
   "dependencies": {
     "@clerk/backend": "^1.1.5",
@@ -15,7 +14,7 @@
     "@hono/clerk-auth": "^2.0.0",
     "@hono/zod-validator": "^0.2.1",
     "@hookform/resolvers": "^3.4.0",
-    "@prisma/client": "^5.14.0",
+    "@prisma/client": "^5.17.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -34,6 +33,7 @@
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.2.0",
     "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "hono": "^4.3.7",
     "json-as-xlsx": "^2.5.6",
@@ -71,7 +71,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
-    "prisma": "^5.14.0",
+    "prisma": "^5.17.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },

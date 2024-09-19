@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { client } from '@/lib/hono'
 import { useSearchParams } from 'next/navigation';
-import { InferResponseType } from 'hono';
 
 
 export function useGetMembers ()

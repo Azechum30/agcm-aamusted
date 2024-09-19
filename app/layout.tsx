@@ -6,6 +6,8 @@ import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import DrawerProvider from "@/providers/drawer-provider";
 import SheetProvider from "@/providers/sheet-provider";
+import TitheDialogProvider from "@/providers/tithe-dialog-provider";
+import EditTitheProvider from "@/providers/EditTitheProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +30,8 @@ export default function RootLayout({children, statistics}: Props) {
               <QueryProvider>
                 <DrawerProvider />
                 <SheetProvider />
+                <TitheDialogProvider />
+                <EditTitheProvider />
                 <div className='scroll-watcher'></div>
                 <Toaster />
                 { children }

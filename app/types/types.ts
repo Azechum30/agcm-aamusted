@@ -38,3 +38,14 @@ export type MemberType = z.infer<typeof MemberSchema>
 export type ColumnDefType = MemberType & {
     serialNumber: string
 }
+
+
+
+export const TitheSchema = z.object( {
+    amount: z.coerce.number( { required_error: 'Amount is required!' } ).positive().step(0.10),
+    paymentDate: z.date( { required_error: 'Payment date is required!' } ).default( () => new Date() ).refine(value => value.toISOString()),
+    paymentMethod: z.string( { required_error: 'Payment method is required!' } ),
+    memberId: z.string().uuid()
+} )
+
+export type TitheType = z.infer<typeof TitheSchema>

@@ -6,7 +6,7 @@ import { useDeleteMember } from "@/features/members/api/use-delete-member"
 import { useConfirmBulkDelete } from "@/app/hooks/use-confirm-bulk-delete"
 
 type Props = {
-    id: number
+    id: string
 }
 
 function Actions ( { id }: Props )

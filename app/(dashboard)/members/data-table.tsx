@@ -101,11 +101,11 @@ function MembersDataTable <TData, TValue>({columns, data, disabled, onDelete}:Da
               <div>
                   <Button onClick={onOpen} variant={'default'} className='w-full md:w-auto'>
                       <Upload className='size-4 mr-1' />
-                      Upload
+                      Upload CSV
                   </Button>
               </div>
               <div>
-                  <Button onClick={()=>exportToExcel(data)} variant={'default'} className='w-full md:w-auto'>
+                  <Button disabled={data?.length === 0} onClick={()=>exportToExcel(data)} variant={'default'} className='w-full md:w-auto'>
                       <Download className='size-4 mr-1' />
                       Excel
                   </Button>

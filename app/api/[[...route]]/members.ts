@@ -53,7 +53,7 @@ const app = new Hono()
         } 
         
             const searchParams = c.req.query( 'q' );
-            let data = await prisma.members.findMany( {orderBy: {entryYear: 'desc'}} )
+            let data = await prisma.member.findMany( {orderBy: {entryYear: 'desc'}} )
             if ( searchParams ) {
                 
                 const searchRegex = new RegExp(searchParams, 'i')
@@ -70,7 +70,7 @@ const app = new Hono()
         '/:id',
         clerkMiddleware(),
         zValidator( 'param', z.object({
-            id: z.coerce.number().positive().optional()
+            id: z.string().optional()
         })),
         async ( c ) =>
         {
@@ -88,7 +88,7 @@ const app = new Hono()
                 })
             }
             
-            const data = await prisma.members.findUnique( {
+            const data = await prisma.member.findUnique( {
                 where: { id: id }
             } );
 
@@ -140,7 +140,7 @@ const app = new Hono()
             const formattedEntryYear = parseInt(validSchema.entryYear as string)
 
             const serialNumber = generateSerialNumber( 'AG', `${validSchema.entryYear}`, 3 )
-            const data = await prisma.members.create( {
+            const data = await prisma.member.create( {
                 data: {
                     ...validSchema,
                     serialNumber: serialNumber,
@@ -157,7 +157,7 @@ const app = new Hono()
         '/bulk-delete',
         clerkMiddleware(),
         zValidator( 'json', z.object( {
-            ids: z.array(z.number().positive())
+            ids: z.array(z.string())
         } ) ),
         
         async ( c ) =>
@@ -169,7 +169,7 @@ const app = new Hono()
                     res: c.json({error : 'Unauthorized'}, 401)
                 })
             }
-            const data = await prisma.members.deleteMany( { where: { id: { in: values.ids  } } } )
+            const data = await prisma.member.deleteMany( { where: { id: { in: values.ids  } } } )
             return c.json({data}, 200)
         } )
     .post(
@@ -192,7 +192,7 @@ const app = new Hono()
             const dataWithSerialNumbers = json.map( person => (
                 { ...person, serialNumber: generateSerialNumber( 'AG', `${ person.entryYear }`, 3 ), gender:person.gender as string, entryYear: Number(person.entryYear) } ) );
 
-            const data = await prisma.members.createMany({data: dataWithSerialNumbers})
+            const data = await prisma.member.createMany({data: dataWithSerialNumbers})
 
             return c.json( { data }, 201)
         
@@ -202,7 +202,7 @@ const app = new Hono()
     '/:id',
     clerkMiddleware(),
     zValidator( 'param', z.object( {
-        id: z.coerce.number().optional()
+        id: z.string().optional()
     } ) ),
     zValidator( 'form', extendedMemberSchema ),
     async ( c ) =>
@@ -254,7 +254,7 @@ const app = new Hono()
                 delete validData[imageFile]
             }
         }
-        const data = await prisma.members.update( {
+        const data = await prisma.member.update( {
             where: { id: id },
             data: {
                 ...validData,
@@ -292,7 +292,7 @@ const app = new Hono()
                 })
             }
 
-            const data = await prisma.members.delete( { where: { id: Number( validParam.id ) } } );
+            const data = await prisma.member.delete( { where: { id: validParam.id  } } );
 
             if ( !data ) {
                 throw new HTTPException( 404, {

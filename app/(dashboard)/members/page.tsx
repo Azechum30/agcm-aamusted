@@ -43,7 +43,7 @@ function MembersPage() {
     
     const title = 'List of AGCM-AAMUSTED Members'
 
-    const tableDat = data?.map( row =>
+    const tableDat = data?.map( (row) =>
     {
       const formattedDate = new Date( row.dateOfBirth ).toLocaleDateString()
       const formattedGender = `${row.gender.charAt(0).toUpperCase()}${row.gender.slice(1)}`
@@ -53,7 +53,7 @@ function MembersPage() {
     })
 
     const header = headers.map( col =>col.header )
-    const tableData = tableDat?.map( row => headers.map( col => row[ col.accessorKey! ] ) )
+    const tableData = tableDat?.map( (row) => headers.map( col => row[ col.accessorKey! ] ) )
     doc.text("LIST OF AGCM, AAMUSTED-KUMASI STUDENTS", 15, 10)
     autoTable( doc, { head: [header], body: tableData, startY: 20, theme:'grid' } )
     doc.save('table.pdf')
@@ -65,7 +65,7 @@ function MembersPage() {
         <CardTitle className='text-xl capitalize line-clamp-1'>List of Members</CardTitle>
         <div className='flex flex-col sm:flex-row sm:items-center gap-3'>
           <OpenCreateForm />
-          <Button variant='destructive' size={ 'sm' } onClick={ exportPDF }>
+          <Button disabled={data?.length === 0} variant='destructive' size={ 'sm' } onClick={ exportPDF }>
             <ArrowBigDown className='size-6 mr-1' />
             View as PDF
           </Button>
