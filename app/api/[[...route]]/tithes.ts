@@ -265,7 +265,7 @@ const app = new Hono()
                 
             )
                
-            const filteredData = uploadData.filter( item => item !== null )
+            const filteredData:Prisma.TitheCreateManyInput[] = uploadData.filter( item => item !== null )
             const data = (await prisma.tithe.createMany( { data: filteredData } )).count
             
             return c.json({data})
