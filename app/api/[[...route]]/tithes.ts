@@ -241,6 +241,7 @@ const app = new Hono()
                     item.paymentDate = new Date( item.paymentDate );
                     const { serialNumber, ...rest } = item;
                     const object = { memberId: serialNumber, ...rest }
+                    
 
                     members.forEach( member =>
                     {
@@ -259,14 +260,16 @@ const app = new Hono()
                         }
                     } );
                     
+                    if ( !existingPayment ) {
+                        return object
+                    } 
 
-                    return existingPayment ? null: object
                 } )
                 
             )
                
-            const filteredData:Prisma.TitheCreateManyInput[] = uploadData.filter( item => item !== null )
-            const data = (await prisma.tithe.createMany( { data: filteredData } )).count
+            const filteredData:Prisma.TitheCreateManyInput[] = uploadData?.filter( item => item !== undefined )
+            const data = (await prisma.tithe.createMany( { data: filteredData} )).count
             
             return c.json({data})
 
