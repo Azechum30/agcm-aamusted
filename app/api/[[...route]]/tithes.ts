@@ -260,16 +260,20 @@ const app = new Hono()
                         }
                     } );
                     
-                    if ( !existingPayment ) {
-                        return object
-                    } 
+                    if ( existingPayment  ) {
+                        throw new HTTPException( 409, {
+                            message: `Member with ID ${existingPayment.memberId} has already made tithe payment for this month.`
+                        })
+                    }
+                    
+                    return object
 
                 } )
                 
             )
                
-            const filteredData:Prisma.TitheCreateManyInput[] = uploadData?.filter( item => item !== undefined )
-            const data = (await prisma.tithe.createMany( { data: filteredData} )).count
+            // const filteredData:Prisma.TitheCreateManyInput[] = uploadData.filter( item => item !== undefined )
+            const data = (await prisma.tithe.createMany( { data: uploadData} )).count
             
             return c.json({data})
 
