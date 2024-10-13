@@ -14,20 +14,28 @@ export const useBulkDeleteMembers = () =>
         mutationFn: async (json) =>
         {
             const response = await client.api.members[ 'bulk-delete' ][ '$post' ]( { json } );
-            return await response.json()
+            const data = await response.json()
+            if ( !response.ok ) {
+                if ( 'error' in data ) {
+                    throw new Error(data.error as string)
+                } else {
+                    throw new Error("An unknown error has occurred!")
+                }
+            }
+            return data
         },
 
-        onSuccess: () =>
+        onSuccess: ({data}) =>
         {
-            toast.success("members deleted successfully")
+            toast.success(`${data.count} were deleted successfully`)
             queryClient.invalidateQueries( { queryKey: [ 'members' ] } )
             queryClient.invalidateQueries( { queryKey: [ 'totalMemberCount' ] } )
             
         },
 
-        onError: () =>
+        onError: (error) =>
         {
-            toast.error("Something went wrong!")
+            toast.error(error.message)
         }
     } )
     return mutation

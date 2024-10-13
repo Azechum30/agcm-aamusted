@@ -1,19 +1,20 @@
 
 'use client'
 
-import { Sheet, SheetContent, SheetDescription, SheetHeader } from "./ui/sheet"
-import { useOpenSheet } from "@/app/hooks/use-open-sheet"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "./ui/sheet"
 import { useCSVReader } from 'react-papaparse'
 import { Button } from "./ui/button"
 import {useMemo,  useState} from 'react'
-import { Save, X } from "lucide-react"
+import { Loader2, Save, X } from "lucide-react"
 import DataTable from "./data-table"
 import { useBulkCreateMembers } from "@/features/members/api/use-bulk-create-members"
 import { cn } from "@/lib/utils"
+import { useOpenBulkCreateMembersSheet } from "@/app/hooks/use-open-bulk-create-members-sheet"
+
 
 export default function SheetComponent ()
 {
-  const { isOpen, onClose } = useOpenSheet()
+  const { isOpen, onClose } = useOpenBulkCreateMembersSheet()
   const { CSVReader } = useCSVReader()
 
   const [columnData, setColumnData] = useState( [] );
@@ -27,7 +28,7 @@ export default function SheetComponent ()
 
   const handleFileUpload = (data:any)=>
   {
-    console.log(data)
+    
     const headers = data?.data[ 0 ].map( ( header: string ) => ( {
       header,
       accessorKey: header,
@@ -66,10 +67,14 @@ export default function SheetComponent ()
       <Sheet open={isOpen} onOpenChange={onClose}>
           <SheetContent side={'left'} className={cn('w-full h-screen overflow-y-auto border-none', data?.length > 0 && 'lg:max-w-7xl')}>
             
-                 <SheetHeader className='font-bold text-xl '>Upload Members Data</SheetHeader>
-                <SheetDescription>
-                  Kindly click on the upload button to select a file to upload
-                </SheetDescription>
+                 <SheetHeader>
+                  <SheetTitle className="font-semibold text-xl mt-2">
+                      Upload a CSV File
+                  </SheetTitle>
+                  <SheetDescription>
+                      Kindly click on the upload input to select a file from your local machine and upload it onto the system. Take note that the selected file must be in a CSV format. 
+                  </SheetDescription>
+              </SheetHeader>
                 <CSVReader
                   onUploadAccepted={ handleFileUpload}
                   onError={handleUploadError}
@@ -98,11 +103,20 @@ export default function SheetComponent ()
                   )}     
                 </CSVReader>
                 { data?.length > 0 && <>
-                <div className='mb-2 '>
-                  <Button variant={'secondary'} onClick={handleDataSubmission} disabled={isPending}> 
-                    <Save className='size-4 mr-1' />
-                    Save to Database
-                </Button>
+                <div className='mb-2'>
+                  <Button variant='blue' onClick={ handleDataSubmission } disabled={isPending}> 
+                      { !isPending ? (
+                        <span className="flex items-center">
+                            <Save className='size-4 mr-1' />
+                            Save to Database
+                        </span>
+                      ) : (
+                          <span className='flex items-center gap-1'>
+                              Saving
+                              <Loader2 className="size-4 animate-spin" />
+                          </span>
+                      )}  
+                    </Button>
                 </div>
                 <DataTable columns={columns} data={data} />
                 </> }

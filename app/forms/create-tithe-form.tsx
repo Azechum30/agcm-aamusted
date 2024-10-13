@@ -50,7 +50,10 @@ function CreateTitheRecord ( { id, onSubmit, disabled, defaultValues, onDelete }
               <div className='flex flex-col md:flex-row gap-3 md:items-center'>
                   <FormField control={ form.control } name='amount' render={ ( { field } ) => (
                   <FormItem className='flex-1'>
-                      <FormLabel className='flex items-center gap-2'><span>Amount</span><span className='text-red-400'>*</span> </FormLabel>
+                      <FormLabel className='flex items-center gap-2'>
+                              <span>Amount</span>
+                              <span className='text-red-400'>*</span> 
+                      </FormLabel>
                       <FormControl>
                           <Input
                               { ...field }

@@ -16,16 +16,16 @@ export const useBulkCreateMembers = () =>
     const mutation = useMutation<ResponseType, Error, RequestType>( {
         mutationFn: async ( json ) => await createMembers( json ),
         
-        onSuccess: () =>
+        onSuccess: ({data}) =>
         {
-            toast.success( "members uploaded successfully" )
+            toast.success(`${data.count} members were added successfully`)
             queryClient.invalidateQueries({queryKey: ['members']})
             queryClient.invalidateQueries({queryKey: ['totalMemberCount']})
         },
 
-        onError: () =>
+        onError: (error) =>
         {
-            toast.error("Something went wrong!")
+            toast.error(error.message)
         }
     })
 
@@ -37,11 +37,17 @@ export const useBulkCreateMembers = () =>
 
 async function createMembers ( json: RequestType )
 {
-    const response = await client.api.members[ 'bulk-create' ][ '$post' ]( { json: { json }} );
+    const response = await client.api.members[ 'bulk-create' ][ '$post' ]( { json: { json } } );
+    const data = await response.json()
 
     if ( !response.ok ) {
-        throw new Error('Failed to upload members')
+        if ( 'error' in data ) {
+            throw new Error(data.error as string)
+        } else {
+            
+            throw new Error('An unknown error has occurred!')
+        }
     }
 
-    return await response.json()
+    return data
 }

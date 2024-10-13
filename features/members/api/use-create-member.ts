@@ -13,7 +13,16 @@ export const useCreateMember= () =>{
         mutationFn: async (form) =>
         {
             const response = await client.api.members.$post( { form } );
-            return await response.json()
+            const data = await response.json()
+            if ( !response.ok ) {
+                if ( 'error' in data ) {
+                    throw new Error(data.error as string)
+                } else {
+                    throw new Error("an unknown error occurred!")
+                }
+            }
+
+            return data;
         },
         onSuccess: () =>
         {
@@ -22,9 +31,9 @@ export const useCreateMember= () =>{
             queryClient.invalidateQueries({queryKey: ['totalMemberCount']})
         },
 
-        onError: () =>
+        onError: (error) =>
         {
-            toast.error("Something went wrong!")
+            toast.error(error.message)
         }
     } )
     return mutation

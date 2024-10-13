@@ -1,15 +1,40 @@
 
 import { ColumnDef } from '@tanstack/react-table'
-import type { TitheType } from '@/app/types/types' 
-import ShowPayerName from './ShowPayerName'
 import TitheActions from './TitheActions'
 import { InferResponseType } from 'hono'
 import {client} from '@/lib/hono'
+import { Checkbox } from './ui/checkbox'
 
 
-type Response = InferResponseType<typeof client.api.tithes.$get>['data'][0]
+type Response = InferResponseType<typeof client.api.tithes.$get>[ 'data' ][ 0 ]
+
 
 export const columns = [
+    {
+        header: ({table}) =>
+        {
+            return (
+                <Checkbox
+                    checked={ table.getIsAllPageRowsSelected() }
+                    onCheckedChange={ () => table.toggleAllPageRowsSelected() }
+                    className="rounded-full"
+                />
+            )
+        },
+        id: "select",
+        cell: ( { row } ) =>
+        {
+            return (
+                <Checkbox
+                    checked={ row.getIsSelected() }
+                    onCheckedChange={ ( val ) => row.toggleSelected( !!val ) }
+                    className='rounded-full'
+                />
+            )
+        },
+        enableHiding: false,
+        enableSorting: false
+    },
     
     {
         header: 'Amount',
@@ -18,11 +43,6 @@ export const columns = [
     {
         header: 'Payment Date',
         accessorKey: 'paymentDate',
-        cell: ( { row } ) =>
-        {
-            const formattedDate = new Date( row.getValue( 'paymentDate' ) as string ).toLocaleDateString()
-            return <div>{formattedDate}</div>
-        }
     },
     {
         header: 'Payment Method',
@@ -31,12 +51,6 @@ export const columns = [
     {
         header: "Payee's Name",
         accessorKey: 'memberId',
-        cell: ( { row } ) =>
-        {
-            const id = row.original.memberId
-            
-            return <ShowPayerName memberId={id} />
-        }
     },
     {
         header: 'Actions',

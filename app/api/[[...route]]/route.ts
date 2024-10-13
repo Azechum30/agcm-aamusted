@@ -4,6 +4,7 @@ import { handle } from 'hono/vercel'
 import members from './members'
 import dashboard from './dashboard'
 import tithes from './tithes'
+import { HTTPException } from 'hono/http-exception'
 
 // export const runtime = 'nodejs'
 const app = new Hono().basePath( '/api' )
@@ -11,7 +12,12 @@ const app = new Hono().basePath( '/api' )
 app.onError( ( err, c ) =>
 {
     console.error( err )
-    return c.json({error: 'Internal server error'}, 500)
+    if ( err instanceof HTTPException ) {
+        
+        return c.json({ error: err.message }, err.status)
+    }
+
+    return c.json({error: "Internal server error"}, 500)
 })
 
 const routes = app

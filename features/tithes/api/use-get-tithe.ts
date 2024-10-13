@@ -10,13 +10,19 @@ export const useGetTithe = (id:string) =>
         queryFn: async () =>
         {
             const response = await client.api.tithes[ ':id' ].$get( { param: { id: id } } );
-            if ( !response.ok ) {
-                toast.error("Something went wrong!")
+            const { data } = await response.json()
+            
+            if(!response.ok){
+                if ( 'error' in data! ) {
+                    toast.error(data.error as string)
+                }
+                else {
+                    toast.error("An unknown error has occurred!")
+                }
             }
-            const {data} = await response.json()
             return data
         },
-        enabled: !!id
+        enabled: !!id,
     } )
     
     return query

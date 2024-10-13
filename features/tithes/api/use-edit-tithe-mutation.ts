@@ -14,17 +14,25 @@ export const useEditTitheMutation = (id?:string) =>
         mutationFn: async (json) =>
         {
             const response = await client.api.tithes[ ':id' ].$patch( { param: { id: id }, json } )
-            if(!response.ok){
-                toast.error("Something went wrong!")
+            const data = await response.json()
+            if ( !response.ok ) {
+                if ( 'error' in data ) {
+                    throw new Error(data.error as string)
+                } else {
+                    throw new Error("An unknown error has occurred!")
+                }
             }
-
-            return await response.json()
+            return data
         },
         onSuccess: () =>
         {
             toast.success( "Tithe Record updated successfully!" )
             queryClient.invalidateQueries({queryKey: ['tithe', { id }]})
             queryClient.invalidateQueries({queryKey: ['tithe-list']})
+        },
+        onError: ( error ) =>
+        {
+            toast.error(error.message)
         }
     })
 

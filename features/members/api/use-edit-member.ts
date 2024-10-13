@@ -20,9 +20,9 @@ export const useEditMember = (id?:string) =>
             queryClient.invalidateQueries({queryKey: ['member', { id }]})
             queryClient.invalidateQueries({queryKey: ['members']})
         },
-        onError: () =>
+        onError: (error) =>
         {
-            toast.error("Failed to update member")
+            toast.error(error.message)
         }
     } )
     
@@ -30,17 +30,24 @@ export const useEditMember = (id?:string) =>
 }
 
 
-async function updateMember ( id: string, data: RequestType )
+async function updateMember ( id: string, formdata: RequestType )
 {
     const response = await client.api.members[ ':id' ][ '$patch' ]( {
         param: { id: id },
-        form: { ...data }
+        form: { ...formdata }
     } );
 
+    const data = await response.json()
+    
+
     if ( !response.ok ) {
-        toast.error(`Something went wrong!: ${response.statusText}`)
-        throw new Error(`Something went wrong!: ${response.statusText}`)
+        if ( 'error' in data ) {
+            throw new Error(data.error as string)
+        } else {
+            
+            throw new Error('An unknown error has occurred!')
+        }
     }
 
-    return await response.json()
+    return data
 }

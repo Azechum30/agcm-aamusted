@@ -30,7 +30,7 @@ function EditTitheComponent ()
     }
     
     if ( isLoading ) {
-        return <span className='flex w-full h-full justify-center items-center'>
+        return <span className='absolute top-[50%] left-[50%]'>
             <Loader2 className='animate-spin' />
         </span>
     }

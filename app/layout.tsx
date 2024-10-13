@@ -8,6 +8,10 @@ import DrawerProvider from "@/providers/drawer-provider";
 import SheetProvider from "@/providers/sheet-provider";
 import TitheDialogProvider from "@/providers/tithe-dialog-provider";
 import EditTitheProvider from "@/providers/EditTitheProvider";
+import UploadTitheSheetProvider from "@/providers/upload-tithe-sheet-provider";
+import { cn } from "@/lib/utils";
+import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import { Loader2 } from "lucide-react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,19 +30,27 @@ export default function RootLayout({children, statistics}: Props) {
   return (
     <ClerkProvider>
       <html lang="en">
-          <body className={ inter.className }>
-              <QueryProvider>
+        <body className={ cn( `relative ${ inter.className }` ) }>
+          <ClerkLoading>
+            <span className="flex justify-center items-center h-screen">
+              <Loader2 className="size-8 animate-spin" />
+            </span>
+          </ClerkLoading>
+          <ClerkLoaded>
+            <QueryProvider>
                 <DrawerProvider />
                 <SheetProvider />
+                <UploadTitheSheetProvider />
                 <TitheDialogProvider />
                 <EditTitheProvider />
                 <div className='scroll-watcher'></div>
-                <Toaster />
+                <Toaster closeButton richColors visibleToasts={2} position="top-right" />
                 { children }
                 <div>
                   {statistics}
                 </div>
               </QueryProvider>
+              </ClerkLoaded>
           </body>
       </html>
     </ClerkProvider>

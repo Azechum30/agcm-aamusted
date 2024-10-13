@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import MembersDataTable from './data-table'
 import { ArrowBigDown, File, Loader2, MoreHorizontal } from 'lucide-react'
 import OpenCreateForm from '@/components/OpenCreateForm'
@@ -13,13 +13,21 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { Button } from '@/components/ui/button'
 import { headers } from '@/components/headers'
+import { useState } from 'react'
 
 
 function MembersPage() {
 
-  const { data, isLoading } = useGetMembers()
+  const [ pageIndex, setPageIndex ] = useState( 0 );
+  const [pageSize, setPageSize] = useState(10)
+  const { data, isLoading } = useGetMembers(pageIndex + 1, pageSize)
   const { mutate, isPending } = useBulkDeleteMembers()
 
+  useEffect( () =>
+  {
+    
+  },[data?.data])
+  
   
   if ( isLoading ) {
     return (
@@ -43,7 +51,7 @@ function MembersPage() {
     
     const title = 'List of AGCM-AAMUSTED Members'
 
-    const tableDat = data?.map( (row) =>
+    const tableDat = data?.data?.map( (row) =>
     {
       const formattedDate = new Date( row.dateOfBirth ).toLocaleDateString()
       const formattedGender = `${row.gender.charAt(0).toUpperCase()}${row.gender.slice(1)}`
@@ -65,7 +73,7 @@ function MembersPage() {
         <CardTitle className='text-xl capitalize line-clamp-1'>List of Members</CardTitle>
         <div className='flex flex-col sm:flex-row sm:items-center gap-3'>
           <OpenCreateForm />
-          <Button disabled={data?.length === 0} variant='destructive' size={ 'sm' } onClick={ exportPDF }>
+          <Button disabled={data?.data?.length === 0} variant='destructive' size={ 'sm' } onClick={ exportPDF }>
             <ArrowBigDown className='size-6 mr-1' />
             View as PDF
           </Button>
@@ -75,7 +83,12 @@ function MembersPage() {
         <Suspense fallback={<span className='flex items-center gap-1'>Loading <MoreHorizontal className='animate-ping' /></span>}>
           <MembersDataTable
             columns={columns}
-            data={ data as QueryResponseType[] }
+            data={ data?.data as QueryResponseType[] }
+            pageIndex={ pageIndex }
+            pageSize={ pageSize }
+            setPageIndex={ setPageIndex }
+            setPageSize={ setPageSize }
+            pageCount={Math.ceil(data?.pageCount! / pageSize)}
             disabled={ isPending }
             onDelete={ ( row ) =>
             {

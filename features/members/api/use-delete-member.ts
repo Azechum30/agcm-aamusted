@@ -19,9 +19,9 @@ export const useDeleteMember = (id?: string) =>
             queryClient.invalidateQueries({queryKey: ['members']})
             queryClient.invalidateQueries({queryKey: ['totalMemberCount']})
         },
-        onError: () =>
+        onError: (error) =>
         {
-            toast.error("Failed to delete member!")
+            toast.error(error.message)
         }
     } )
     
@@ -33,9 +33,14 @@ export const useDeleteMember = (id?: string) =>
 async function deleteMember ( id?: string )
 {
     const response = await client.api.members[ ':id' ].$delete( { param: { id: id } } );
+    const data = await response.json()
     if ( !response.ok ) {
-        throw new Error(`An error occurred! ${response.statusText}`)
+        if ( 'error' in data ) {
+            throw new Error(data.error as string)
+        } else {
+            throw new Error('An unknown error has occurred!')   
+        }
     }
 
-    return await response.json()
+    return data
 }

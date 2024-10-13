@@ -14,7 +14,15 @@ export const useDeleteTitheMutation = (id?:string) =>
         mutationFn: async (param) =>
         {
             const response = await client.api.tithes[ ':id' ].$delete( { param } )
-            return await response.json()
+            const data = response.json()
+            if ( !response.ok ) {
+                if ( 'error' in data ) {
+                    throw new Error(data.error as string)
+                } else {
+                    throw new Error("An unknown error has occurred!")
+                }
+            }
+            return data
         },
         onSuccess: () =>
         {

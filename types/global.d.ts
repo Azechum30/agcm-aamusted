@@ -7,7 +7,8 @@ declare global
     interface CustomJwtSessionClaims
     {
         metadata: {
-            onboardingComplete?: boolean
+            onboardingComplete?: boolean,
+            role?:string
         }
     }
 }

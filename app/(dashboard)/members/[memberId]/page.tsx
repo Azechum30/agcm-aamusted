@@ -3,6 +3,7 @@ import { useGetMember } from "@/features/members/api/use-get-member"
 import { Loader2 } from "lucide-react"
 import Image from "next/image"
 import {Card, CardHeader, CardDescription, CardContent, CardTitle} from '@/components/ui/card'
+import { toast } from "sonner"
 
 type Props = {
     params: {
@@ -12,13 +13,14 @@ type Props = {
 
 function MemberDetailPage ( { params }: Props )
 {
-    const {data, isLoading } = useGetMember(params.memberId)
+    const {data, isLoading, isError, error } = useGetMember(params.memberId)
 
     if ( isLoading ) {
         return <span className="w-full h-screen flex justify-center items-center">
             <Loader2 className="size-6 animate-spin" />
         </span>
     }
+    isError && toast.error(error.message)
   return (
     <Card className="shadow-none -mt-4">
           <CardHeader className="border-b mb-6 text-center md:text-left h-16 bg-gray-100">

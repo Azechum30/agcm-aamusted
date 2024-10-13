@@ -7,6 +7,7 @@ import { HTTPException } from 'hono/http-exception'
 import {v2 as cloudinary} from 'cloudinary'
 import { generateSerialNumber } from "@/lib/generateId";
 import * as z from 'zod'
+import { Prisma } from "@prisma/client";
 
 
 
@@ -48,29 +49,49 @@ const app = new Hono()
         const auth = getAuth( c );
         if ( !auth?.userId ) {
             throw new HTTPException( 401, {
-                res: c.json({error: 'Unauthenticated'}, 401)
+                message: "You need to log in to access this route."
             })
         } 
         
             const searchParams = c.req.query( 'q' );
-            let data = await prisma.member.findMany( {orderBy: {entryYear: 'desc'}} )
-            if ( searchParams ) {
+            const page = parseInt( c.req.query( 'page' ) as string ) || 1
+            const pageSize = parseInt( c.req.query( 'pageSize' ) as string ) || 10
+            const skip = (page -1 ) * pageSize
+           
+            let query: Prisma.MemberWhereInput = {}
+            
+            if ( searchParams !== undefined ) {
                 
-                const searchRegex = new RegExp(searchParams, 'i')
-                data = data.filter( member =>
-                {
-                    return searchRegex.test(member.firstName) || searchRegex.test(member.lastName)
-                } )
-
+                query = {
+                    OR: [
+                        { firstName: { contains: searchParams, mode: 'insensitive' } },
+                        { lastName: { contains: searchParams, mode: 'insensitive' } },
+                        { hometown: { contains: searchParams, mode: 'insensitive' } },
+                        { gender: { equals: searchParams, mode: 'insensitive' } },
+                        { department: { contains: searchParams, mode: 'insensitive' } }
+                        
+                    ]
+                }
             }
-            return c.json({data}, 200)
+
+            const [data, pageCount] = await prisma.$transaction( [
+                prisma.member.findMany( {
+                where: query,
+                orderBy: { entryYear: 'desc' },
+                take: pageSize,
+                skip
+                } ),
+                prisma.member.count()
+            ])
+            
+            return c.json({data, pageCount}, 200)
   
     } )
     .get(
         '/:id',
         clerkMiddleware(),
         zValidator( 'param', z.object({
-            id: z.string().optional()
+            id: z.string()
         })),
         async ( c ) =>
         {
@@ -78,15 +99,10 @@ const app = new Hono()
             const { id } = c.req.valid( 'param' )
             if ( !auth?.userId ) {
                 throw new HTTPException( 401, {
-                    res: c.json({error: 'Unauthorized!'}, 401)
+                    message: 'You need to log in to access this route'
                 })
             }
 
-            if ( !id ) {
-                throw new HTTPException( 401, {
-                    res: c.json({error: 'Missing Id!'}, 400)
-                })
-            }
             
             const data = await prisma.member.findUnique( {
                 where: { id: id }
@@ -94,7 +110,7 @@ const app = new Hono()
 
             if ( !data ) {
                 throw new HTTPException( 401, {
-                    res: c.json({error: 'Member not found!'}, 404)
+                    message: 'Member not found!'
                 })
             }
 
@@ -104,36 +120,50 @@ const app = new Hono()
     .post(
         '/',
         clerkMiddleware(),
-        zValidator('form', extendedMemberSchema),
+        zValidator( 'form', extendedMemberSchema, ( result ) =>
+        {
+            if ( !result.success ) {
+                throw new HTTPException( 400, {
+                    message: `Invalid data`
+                })
+            }
+        }),
         async( c ) =>
     {
         const auth = getAuth( c );
         if(!auth?.userId){
             throw new HTTPException( 401, {
-                res: c.json({error: 'Unauthenticated'}, 401)
+                message: 'You need to log in to access this route'
             })
         }
         
-            const validSchema = c.req.valid('form');
-            const file = validSchema.imageFile as File;
-            const arrayBuffer = await file.arrayBuffer();
-            const buffer = new Uint8Array( arrayBuffer );
+            let validSchema = c.req.valid( 'form' );
+            
+            if ( validSchema.imageFile !== 'undefined' ) {
+                
+                const file = validSchema.imageFile as File;
+                const arrayBuffer = await file.arrayBuffer();
+                const buffer = new Uint8Array( arrayBuffer );
 
-            const uploadedResponse:any = await new Promise( ( resolve, reject ) =>
-            {
-                 cloudinary.uploader.upload_stream( {}, ( err, result ) =>
+                const uploadedResponse:any = await new Promise( ( resolve, reject ) =>
                 {
-                    if ( err ) {
-                        return reject(err)
-                    }
-                    return resolve(result)
-                } ).end( buffer )
-            })
+                    cloudinary.uploader.upload_stream( {}, ( err, result ) =>
+                    {
+                        if ( err ) {
+                            return reject(err)
+                        }
+                        return resolve(result)
+                    } ).end( buffer )
+                })
 
-            if ( 'secure_url' in uploadedResponse ) {
-                validSchema.imageUrl = uploadedResponse.secure_url as string
-                const imageFile = 'imageFile'
-                delete validSchema[imageFile]
+                if ( 'secure_url' in uploadedResponse ) {
+                    validSchema.imageUrl = uploadedResponse.secure_url as string
+                    const imageFile = 'imageFile'
+                    delete validSchema[imageFile]
+                }
+            }else{
+                const { imageFile, ...rest } = validSchema
+                validSchema = rest
             }
 
             const date = validSchema.dateOfBirth.toString().split('T')[0]
@@ -166,7 +196,7 @@ const app = new Hono()
             const values = c.req.valid( 'json' );
             if ( !auth?.userId ) {
                 throw new HTTPException( 401, {
-                    res: c.json({error : 'Unauthorized'}, 401)
+                    message: 'You need to log in to access this route'
                 })
             }
             const data = await prisma.member.deleteMany( { where: { id: { in: values.ids  } } } )
@@ -185,7 +215,7 @@ const app = new Hono()
 
             if ( !auth?.userId ) {
                 throw new HTTPException( 401, {
-                    res: c.json({error: 'Unauthenticated'}, 401)
+                    message: "You need to log in to access this route."
                 })
             }
 
@@ -202,7 +232,7 @@ const app = new Hono()
     '/:id',
     clerkMiddleware(),
     zValidator( 'param', z.object( {
-        id: z.string().optional()
+        id: z.string()
     } ) ),
     zValidator( 'form', extendedMemberSchema ),
     async ( c ) =>
@@ -213,16 +243,13 @@ const app = new Hono()
 
         if ( !auth?.userId ) {
             throw new HTTPException( 401, {
-                res: c.json( { error: 'Unauthorized' }, 401 ),
-                message: 'you are not authenticated'
+                message: 'You need to log in to access this route'
             })
         }
 
         if ( !id ) {
             throw new HTTPException( 400, {
-                res: c.json( { error: 'Missing a valid Id' }, 400 ),
-                cause: 'Missing Id',
-                message: 'You did not provide a valid param'
+                message: 'Missing a valid ID'
             })
         }
 
@@ -262,18 +289,14 @@ const app = new Hono()
             }
         } )
         
-        if ( !data ) {
-            throw new HTTPException( 404, {
-                res: c.json({error: 'Not found'}, 404)
-            })
-        }
-        return c.json({data}, 201)
+        return c.json( { data }, 201 )
+        
         } )
     .delete(
         '/:id',
         clerkMiddleware(),
         zValidator( 'param', z.object( {
-            id: z.string().optional()
+            id: z.string()
         } ) ),
         async ( c ) =>
         {
@@ -282,13 +305,13 @@ const app = new Hono()
 
             if ( !auth?.userId ) {
                 throw new HTTPException( 401, {
-                    res: c.json({error: 'Unauthorized'}, 401)
+                    message: "You need to log in to access this route."
                 })
             }
 
             if ( !validParam.id ) {
                 throw new HTTPException( 400, {
-                    res: c.json({error: 'Missing a valid Id'}, 400)
+                    message: "Missing a valid ID"
                 })
             }
 
@@ -296,10 +319,11 @@ const app = new Hono()
 
             if ( !data ) {
                 throw new HTTPException( 404, {
-                    res: c.json({error: 'Not found'}, 404)
+                    message: "member doesn't exist"
                 })
             }
-            return c.json({data})
+            return c.json( { data } )
+        
         }
     )
     
