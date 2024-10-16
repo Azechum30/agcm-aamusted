@@ -49,7 +49,7 @@ function EditTitheComponent ()
     {
         const ok = await confirm()
         if ( ok ) {
-            deleteMutation( { id: id }, {
+            deleteMutation( { id: id! }, {
                 onSuccess: () =>
                 {
                     onClose()
