@@ -29,7 +29,7 @@ function EditMemberDialog ()
     "You are about to delete this member permanently from the system. Click on 'Cancel' to abort the process or 'Continue' to delete the member's data."
   );
 
-  const { mutate:deleteMutation, isPending: isDeletePending} = useDeleteMember(id)
+  const { mutate:deleteMutation, isPending: isDeletePending} = useDeleteMember(id  as string)
 
   const formattedDate = new Date(`${data?.dateOfBirth}`).toDateString()
   
@@ -67,7 +67,7 @@ const defaultValues = {
   {
     const ok = await confirm();
     if ( ok ) {
-      deleteMutation( { id }, {
+      deleteMutation( { id: id! }, {
         onSuccess: () =>
         {
          onClose()
