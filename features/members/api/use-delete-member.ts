@@ -32,7 +32,7 @@ export const useDeleteMember = (id?: string) =>
 
 async function deleteMember ( id?: string )
 {
-    const response = await client.api.members[ ':id' ].$delete( { param: { id: id } } );
+    const response = await client.api.members[ ':id' ].$delete( { param: { id: id! } } );
     const data = await response.json()
     if ( !response.ok ) {
         if ( 'error' in data ) {
