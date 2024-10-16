@@ -28,7 +28,8 @@ export const MemberSchema = z.object( {
     hostel: z.string( { required_error: 'You hostel name is required' } ),
     imageUrl: z.string().optional(),
     imageFile: z.instanceof( File ).optional(),
-    hometown: z.string({required_error: 'home town is required'})
+    hometown: z.string({required_error: 'home town is required'}),
+    agcmTribe: z.string().optional()
 
 } )
 

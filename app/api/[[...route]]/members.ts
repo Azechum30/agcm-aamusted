@@ -8,6 +8,7 @@ import {v2 as cloudinary} from 'cloudinary'
 import { generateSerialNumber } from "@/lib/generateId";
 import * as z from 'zod'
 import { Prisma } from "@prisma/client";
+import { formatFileSize } from "react-papaparse";
 
 
 
@@ -56,6 +57,7 @@ const app = new Hono()
             const searchParams = c.req.query( 'q' );
             const page = parseInt( c.req.query( 'page' ) as string ) || 1
             const pageSize = parseInt( c.req.query( 'pageSize' ) as string ) || 10
+            const paginate = Boolean(c.req.query('paginate') as string) || false
             const skip = (page -1 ) * pageSize
            
             let query: Prisma.MemberWhereInput = {}
@@ -74,15 +76,31 @@ const app = new Hono()
                 }
             }
 
-            const [data, pageCount] = await prisma.$transaction( [
-                prisma.member.findMany( {
-                where: query,
-                orderBy: { entryYear: 'desc' },
-                take: pageSize,
-                skip
-                } ),
-                prisma.member.count()
-            ])
+            let data = [];
+            let pageCount = 0
+
+            if ( paginate ) {
+                
+                [data, pageCount] = await prisma.$transaction( [
+                    prisma.member.findMany( {
+                    where: query,
+                    orderBy: { entryYear: 'desc' },
+                    take:  pageSize,
+                    skip
+                    } ),
+                    prisma.member.count()
+                ] )
+                
+            } else {
+                [data, pageCount] = await prisma.$transaction( [
+                    prisma.member.findMany( {
+                        where: query
+                    } ),
+                    prisma.member.count()
+                ])
+                
+            }
+
             
             return c.json({data, pageCount}, 200)
   

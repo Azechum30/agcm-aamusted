@@ -174,6 +174,17 @@ function CreateMember ({id, defaultValues, onSubmit, onDelete, disabled}:CreateM
               )} />
               </div>
               <div className='flex flex-col md:flex-row md:items-center gap-3'>
+                  <FormField control={ form.control } name='agcmTribe' render={ ( { field } ) => (
+                      <FormItem className='flex-1'>
+                          <FormLabel className='text-sm'>AGCM Tribe</FormLabel>
+                          <FormControl>
+                              <Input
+                                  { ...field }
+                                  className='bg-white dark:bg-inherit'
+                              />
+                          </FormControl>
+                      </FormItem>
+                  )} />
                   <FormField control={ form.control } name='imageFile' render={ ( { field } ) => (
                   <FormItem className='flex-1'>
                       <FormLabel className='text-sm'>Profile Image</FormLabel>
@@ -187,7 +198,8 @@ function CreateMember ({id, defaultValues, onSubmit, onDelete, disabled}:CreateM
                           </FormControl>
                           <FormMessage />
                   </FormItem>
-              )} />
+                  ) } />
+                  
               </div>
                 {
                   disabled ? <LoadingButton /> :

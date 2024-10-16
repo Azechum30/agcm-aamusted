@@ -27,6 +27,7 @@ model Member {
   hometown     String
   course       String
   entryYear    Int
+  agcmTribe    String?
   imageUrl     String?
   serialNumber String
   tithes       Tithe[]

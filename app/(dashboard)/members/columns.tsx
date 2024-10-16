@@ -81,6 +81,10 @@ export const columns = [
         accessorKey: 'gender'
     },
     {
+        header: "AgcmTribe",
+        accessorKey: 'agcmTribe'
+    },
+    {
         header: 'Contact',
         accessorKey: 'phoneNumber',
     },

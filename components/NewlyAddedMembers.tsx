@@ -6,6 +6,7 @@ import { useGetMembers } from '@/features/members/api/use-get-members'
 import { Loader2 } from 'lucide-react'
 import { columnsType } from './columns'
 import { Separator } from './ui/separator'
+import { QueryResponseType } from '@/app/(dashboard)/members/columns'
 
 
 
@@ -114,7 +115,7 @@ function NewlyAddedMembers ()
         return <span className='flex justify-center items-center'><Loader2 className='size-6 animate-spin' /></span>
     }
   return (
-    <DataTable columns={columns} data={data as any } />
+    <DataTable columns={columns} data={data?.data as any[] } />
   )
 }
 

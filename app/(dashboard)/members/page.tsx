@@ -20,7 +20,7 @@ function MembersPage() {
 
   const [ pageIndex, setPageIndex ] = useState( 0 );
   const [pageSize, setPageSize] = useState(10)
-  const { data, isLoading } = useGetMembers(pageIndex + 1, pageSize)
+  const { data, isLoading } = useGetMembers(true, pageIndex + 1, pageSize)
   const { mutate, isPending } = useBulkDeleteMembers()
 
   useEffect( () =>

@@ -100,7 +100,7 @@ function CreateTitheRecord ( { id, onSubmit, disabled, defaultValues, onDelete }
                                   </SelectTrigger>
                                   <SelectContent>
                                       { isLoading ? <Loader2 className='animate-spine' /> : (
-                                          data?.map( person => (
+                                          data?.data.map( person => (
                                               <SelectItem key={ person.id } value={ person.id }>
                                                   {person.firstName} {person.lastName}
                                               </SelectItem>
