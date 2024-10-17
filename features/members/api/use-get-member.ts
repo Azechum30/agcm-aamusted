@@ -3,7 +3,7 @@ import { client } from '@/lib/hono';
 
 
 
-export const useGetMember = (id?:string) =>
+export const useGetMember = (id:string) =>
 {
     const query = useQuery( {
         queryKey: [ 'member', { id } ],
@@ -15,8 +15,8 @@ export const useGetMember = (id?:string) =>
 }
 
 
-async function fetchMember (id?:string){
-    const response = await client.api.members[ ':id' ].$get( { param: { id: id! } } );
+async function fetchMember (id:string){
+    const response = await client.api.members[ ':id' ].$get( { param: { id: id } } );
     const { data } = await response.json();
 
     if ( !response.ok ) {

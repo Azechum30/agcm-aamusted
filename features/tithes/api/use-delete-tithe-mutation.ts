@@ -7,7 +7,7 @@ type ResponseType = InferResponseType<typeof client.api.tithes[ ':id' ][ '$delet
 type RequestType = InferRequestType<typeof client.api.tithes[ ':id' ][ '$delete' ]>[ 'param' ]
 
 
-export const useDeleteTitheMutation = (id?:string) =>
+export const useDeleteTitheMutation = (id:string) =>
 {
     const queryClient = useQueryClient()
     const mutation = useMutation<ResponseType, Error, RequestType>( {

@@ -13,13 +13,13 @@ function EditTitheComponent ()
 {
     const { id, isOpen, onClose } = useEditTitheHook()
     const { data, isLoading } = useGetTithe( id! )
-    const { mutate, isPending } = useEditTitheMutation( id )
+    const { mutate, isPending } = useEditTitheMutation( id as string )
     const [DeleteAlertComponent, confirm] = useConfirmDelete(
         "Are you sure?",
         `You are about to remove the tithe record with ID ${id} permanently. Click on 'Cancel' to terminate the process or 'Continue' to proceed and remove the record.`
     )
 
-    const {mutate: deleteMutation} = useDeleteTitheMutation(id)
+    const {mutate: deleteMutation} = useDeleteTitheMutation(id as string)
 
     const defaultValues = {
         ...data,

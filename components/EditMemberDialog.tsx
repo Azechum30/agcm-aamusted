@@ -21,9 +21,9 @@ function EditMemberDialog ()
 {
   
   const { isOpen, onClose, id } = useEditMemberDialog()
-  const {mutate, isPending} = useEditMember(id)
+  const {mutate, isPending} = useEditMember(id as string)
 
-  const { data, isLoading } = useGetMember( id )
+  const { data, isLoading } = useGetMember( id as string )
   const [ BulkDeleteDialog, confirm ] = useConfirmBulkDelete(
     "Are you sure?",
     "You are about to delete this member permanently from the system. Click on 'Cancel' to abort the process or 'Continue' to delete the member's data."

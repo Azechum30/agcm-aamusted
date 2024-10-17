@@ -7,13 +7,13 @@ import { toast } from "sonner";
 type ResponseType = InferResponseType<typeof client.api.tithes[':id']['$patch']> 
 type RequestType = InferRequestType<typeof client.api.tithes[':id']['$patch']>['json'] 
 
-export const useEditTitheMutation = (id?:string) =>
+export const useEditTitheMutation = (id:string) =>
 {
     const queryClient = useQueryClient()
     const mutation = useMutation<ResponseType, Error, RequestType>( {
         mutationFn: async (json) =>
         {
-            const response = await client.api.tithes[ ':id' ].$patch( { param: { id: id }, json } )
+            const response = await client.api.tithes[ ':id' ].$patch( { param: { id: id}, json } )
             const data = await response.json()
             if ( !response.ok ) {
                 if ( 'error' in data ) {

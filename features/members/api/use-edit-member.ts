@@ -9,11 +9,11 @@ type RequestType = InferRequestType<typeof client.api.members[ ':id' ][ '$patch'
 
 
 
-export const useEditMember = (id?:string) =>
+export const useEditMember = (id:string) =>
 {
     const queryClient = useQueryClient()
     const mutation = useMutation<ResponseType, Error, RequestType>( {
-        mutationFn: async ( form ) => await updateMember( id!, form ),
+        mutationFn: async ( form ) => await updateMember( id, form ),
         onSuccess: () =>
         {
             toast.success("Member updated successfully")
