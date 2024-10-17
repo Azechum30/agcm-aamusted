@@ -8,7 +8,6 @@ import {v2 as cloudinary} from 'cloudinary'
 import { generateSerialNumber } from "@/lib/generateId";
 import * as z from 'zod'
 import { Prisma } from "@prisma/client";
-import { formatFileSize } from "react-papaparse";
 
 
 

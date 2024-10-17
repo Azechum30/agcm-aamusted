@@ -16,7 +16,7 @@ export const useGetMember = (id?:string) =>
 
 
 async function fetchMember (id?:string){
-    const response = await client.api.members[ ':id' ].$get( { param: { id: id } } );
+    const response = await client.api.members[ ':id' ].$get( { param: { id: id! } } );
     const { data } = await response.json();
 
     if ( !response.ok ) {
