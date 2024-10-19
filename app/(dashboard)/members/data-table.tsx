@@ -29,6 +29,8 @@ import { useConfirmBulkDelete } from "@/app/hooks/use-confirm-bulk-delete";
 import { exportToExcel } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useOpenBulkCreateMembersSheet } from "@/app/hooks/use-open-bulk-create-members-sheet";
+import { useUser } from "@clerk/nextjs";
+import ExportAsXLSX from "@/components/export-as-xlsx";
 
 
 type DataTableProps<TData, TValue> = {
@@ -79,6 +81,8 @@ function MembersDataTable <TData, TValue>({columns, data, pageIndex, pageSize, s
     
     } );
 
+    const isAdmin = useUser().user?.organizationMemberships?.[ 0 ]?.role === "org:admin";
+
 
     
   return (
@@ -104,7 +108,7 @@ function MembersDataTable <TData, TValue>({columns, data, pageIndex, pageSize, s
               </div>
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                          <Button variant='outline' className='w-full md:w-auto md:mr-auto'>
+                          <Button variant='outline' className='hidden lg:flex items-center w-full md:w-auto md:mr-auto'>
                               <LayoutGrid className="w-4 h-4 mr-1" />
                               Columns
                           </Button>
@@ -123,26 +127,27 @@ function MembersDataTable <TData, TValue>({columns, data, pageIndex, pageSize, s
                   </DropdownMenu>
               
               <Search />
-              <div>
-                  <Button onClick={onOpen} variant={'default'} className='w-full md:w-auto'>
+              {
+                  isAdmin && (
+                      <>
+                        <div>
+                  <Button size='sm' onClick={onOpen} variant={'default'} className='w-full md:w-auto'>
                       <Upload className='size-4 mr-1' />
                       Upload CSV
                   </Button>
               </div>
               <div>
-                  <Button disabled={data?.length === 0} onClick={()=>exportToExcel(data)} variant={'default'} className='w-full md:w-auto'>
-                      <Download className='size-4 mr-1' />
-                      Excel
-                  </Button>
+                  <ExportAsXLSX data={data as any[]} />
               </div>
               <div className="w-full md:w-auto">
                   { 
-                      table.getSelectedRowModel().rows ? (
-                          table.getSelectedRowModel().rows.length > 0 &&
+                      table?.getSelectedRowModel().rows ? (
+                          table?.getSelectedRowModel().rows.length > 0 &&
                       <Button
                           size='sm'
-                                  disabled={ disabled }
-                                  className="w-full"
+                          variant='destructive'
+                          disabled={ disabled }
+                          className="w-full"
                           onClick={ async() =>
                           {
                               const ok = await confirm()
@@ -160,6 +165,9 @@ function MembersDataTable <TData, TValue>({columns, data, pageIndex, pageSize, s
                       ): null
                    }
               </div>
+                      </>
+                  )
+              }
           </div>
           <div id="my-table" className="border rounded-md overflow-x-auto w-full lg:overflow-hidden">
             <Table>
@@ -193,9 +201,15 @@ function MembersDataTable <TData, TValue>({columns, data, pageIndex, pageSize, s
           </Table>
           </div>
           <div className="flex flex-row justify-between items-center mt-3">
-              <div className="text-muted-foreground text-xs">
-                  { table.getSelectedRowModel().rows.length } of {' '}
-                  {table.getRowModel().rows.length } row(s) is selected
+              <div className="text-muted-foreground text-xs flex items-center gap-2">
+                  <div>
+                      Page {' '}{ pageIndex + 1 } { ' ' } of {' '}
+                      { pageCount } {' '} Page(s)
+                  </div>
+                  <div className='hidden md:block'>
+                      { table.getSelectedRowModel().rows.length } of {' '}
+                      {table.getRowModel().rows.length } row(s) selected
+                  </div>
               </div>
           <div className='flex gap-2 items-center'>
                   <Button

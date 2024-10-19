@@ -97,6 +97,7 @@ export const columns = [
         accessorKey: 'email'
     },
     {
+        header: 'Actions',
         id: 'actions',
         cell: ( { row } ) =>
         {

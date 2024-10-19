@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useEditMemberDialog } from "@/app/hooks/use-open-form"
 import { useDeleteMember } from "@/features/members/api/use-delete-member"
 import { useConfirmBulkDelete } from "@/app/hooks/use-confirm-bulk-delete"
+import { useUser } from "@clerk/nextjs"
 
 type Props = {
     id: string
@@ -18,6 +19,9 @@ function Actions ( { id }: Props )
     'You are about to delete this member permanently from the system. Kindly click on "Cancel" to abort the process or "Continue" to delete the member\'s data. '
   )
 
+  const isAdmin = useUser().user?.organizationMemberships?.[ 0 ]?.role === 'org:admin'
+  
+
   async function onDelete ()
   {
     const ok = await confirm();
@@ -26,6 +30,10 @@ function Actions ( { id }: Props )
     }
   }
 
+  if ( !isAdmin ) {
+    return null
+  }
+  
   return (
     <>
       <BulkDeleteDialog />
@@ -44,7 +52,7 @@ function Actions ( { id }: Props )
             disabled={ false }
             onClick={ () => { onOpen( String( id ) ) } }
           >
-                <Edit className='size-4 mr-2' />
+                <Edit className='size-4 mr-2 text-blue-500' />
                 Edit
             </DropdownMenuItem>
           <DropdownMenuItem
@@ -52,7 +60,7 @@ function Actions ( { id }: Props )
             disabled={ false }
             onClick={ onDelete }
           >
-                <Trash2 className='size-4 mr-2' />
+                <Trash2 className='size-4 mr-2 text-red-500' />
                 Delete
             </DropdownMenuItem>
         </DropdownMenuContent>

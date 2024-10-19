@@ -44,7 +44,7 @@ function CreateTitheRecord ( { id, onSubmit, disabled, defaultValues, onDelete }
                       {!!id ? ' Edit Tithe Record': 'Add A New Tithe Record' }
                   </h1>
                   <FormDescription>
-                      {!!id ? 'Make changes and save to update the tithe record!' : 'Fill out the out the form to create a new tithe record'}
+                      {!!id ? 'Make changes and save to update the tithe record!' : 'Fill out the form to add a new tithe record to the database'}
                   </FormDescription>
               </div>
               <div className='flex flex-col md:flex-row gap-3 md:items-center'>

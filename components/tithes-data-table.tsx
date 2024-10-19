@@ -93,7 +93,7 @@ function TithesDataTable<TData, TValue> ( { columns, data, pageIndex, pageSize, 
               </div>
               <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                      <Button variant='outline' size='sm' className='w-full md:w-auto md:mr-auto'>
+                      <Button variant='outline' size='sm' className='hidden lg:flex items-center w-full md:w-auto md:mr-auto'>
                           <LayoutDashboard className='size-4 mr-1' />
                           Columns
                       </Button>
@@ -113,7 +113,7 @@ function TithesDataTable<TData, TValue> ( { columns, data, pageIndex, pageSize, 
               <Search />
               <div className='w-full md:w-auto'>
                   {
-                      (table.getSelectedRowModel().rows.length > 0 && canExportData === 'org:admin') ? (
+                      (table?.getSelectedRowModel().rows.length > 0 && canExportData === 'org:admin') ? (
                           <Button
                               variant='destructive'
                               className='w-full md:w-auto'
@@ -141,7 +141,7 @@ function TithesDataTable<TData, TValue> ( { columns, data, pageIndex, pageSize, 
                           <div className='w-full md:w-auto'>
                             <Button size='sm' className='w-full' onClick={onOpen}>
                                 <Upload className='size-4 mr-1' />
-                                Upload Tithes
+                                Upload CSV
                             </Button>
                         </div>
                           <ExportAsXLSX data={ data as any } filename='List of Tithes' />

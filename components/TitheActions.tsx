@@ -11,6 +11,7 @@ import { Edit, MoreHorizontal, Trash2 } from 'lucide-react'
 import { useEditTitheHook } from '@/app/hooks/use-edit-tithe-hook'
 import { useConfirmDelete } from '@/app/hooks/use-confirm-delete'
 import { useDeleteTitheMutation } from '@/features/tithes/api/use-delete-tithe-mutation'
+import { useUser } from '@clerk/nextjs'
 
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
 
 function TitheActions ( { id }: Props )
 {
+    const {user} = useUser()
     const { onOpen, onClose } = useEditTitheHook()
     const [DeleteAlertComponent, confirm] = useConfirmDelete(
         "Are you sure?",
@@ -37,6 +39,12 @@ function TitheActions ( { id }: Props )
                 }
             })
         }
+    }
+
+   
+
+    if ( user?.organizationMemberships?.[0]?.role === undefined || user?.organizationMemberships?.[0]?.role !== 'org:admin' ) {
+        return null
     }
   return (
       <>
@@ -59,7 +67,7 @@ function TitheActions ( { id }: Props )
                           variant='ghost' size='sm'
                           onClick={handleDelete}
                     >
-                                <Trash2 className='size-4 mr-1' />
+                                <Trash2 className='size-4 mr-1 text-red-500' />
                             Delete
                         </Button>
                   </DropdownMenuItem>

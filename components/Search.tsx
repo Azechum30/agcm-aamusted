@@ -55,7 +55,7 @@ function Search ()
     <Form {...form}>
           <form
               onSubmit={ ( e ) => { e.preventDefault(); form.handleSubmit( onSubmit )()}  }
-              className={ cn( 'flex items-center px-3 py-1 rounded-md sm:rounded-full border bg-inherit md:w-auto w-full', { 'border-red-400': form.formState.errors.search } ) }
+              className={ cn( 'flex flex-row-reverse sm:flex-row items-center  px-3 py-1 rounded-md sm:rounded-full border bg-inherit md:w-auto w-full', { 'border-red-400': form.formState.errors.search } ) }
           >
               <SearchIcon strokeWidth={1.5} className='hidden sm:flex text-muted-foreground w-4 h-4' />
               <FormField control={ form.control } name='search' render={ ( { field } ) => (

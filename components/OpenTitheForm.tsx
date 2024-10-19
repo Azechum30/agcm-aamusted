@@ -8,12 +8,15 @@ function OpenTitheForm ()
 {
     const {onOpen} = useCreateTithe()
   return (
-    <>
-      <Button variant='blue' className="w-full md:w-auto" type="submit" onClick={ onOpen }>
+      <Button
+        variant='blue'
+        className="w-full md:w-auto"
+        size='sm'
+        onClick={ onOpen }>
         <Plus strokeWidth={2} className="size-4 mr-1" />
-        Add a new Tithe Record
+        Add New
       </Button>
-    </>
+    
   )
 }
 
